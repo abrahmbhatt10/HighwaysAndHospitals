@@ -112,21 +112,4 @@ public class HighwaysAndHospitals {
         numConnectedCities[mostConnectedCity] = -1;
         return mostConnectedCity;
     }
-
-    public static int maxHighways(int cities[][])
-    {
-        return (cities.length - 1);
-    }
-
-    public static long costForSolution(int n, int cities[][], int hospitalCost, int highwayCost, int numHospitals, int numHighways){
-        long answer;
-        if((numHospitals < 1) || (numHospitals > n)){
-            return -1;
-        }
-        if((numHighways < 0) || (numHighways > maxHighways(cities))){
-            return -1;
-        }
-        answer = (hospitalCost * numHospitals) + (highwayCost * numHighways);
-        return answer;
-    }
 }
