@@ -51,7 +51,7 @@ public class HighwaysAndHospitals {
                 }
             }
             System.out.println("Hospitals "+ hCities.toString());
-            System.out.println("Hightways "+ connectedCities.toString());
+            System.out.println("Highways "+ connectedCities.toString());
         }
         for(int i = 1; i < n+1; i++){
             if(!hCities.containsKey(i) && !connectedCities.containsKey(i)){
