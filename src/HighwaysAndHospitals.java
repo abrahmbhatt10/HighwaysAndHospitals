@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Highways & Hospitals
  * A puzzle created by Zach Blick
@@ -18,7 +21,15 @@ public class HighwaysAndHospitals {
         long minCost = 0;
         long mCost;
         int numHospitals;
-
+        Queue<Integer> hCities = new LinkedList<Integer>();
+        Queue<Integer> connectedCities = new LinkedList<Integer>();
+        int maxValue = n+1;
+        int mostConnectedCity;
+        for(int i = 0; i < cities.length; i++){
+            mostConnectedCity = getMostConnectedCity(maxValue, cities);
+            hCities.add(mostConnectedCity);
+            addConnectedCity(connectedCities, cities, mostConnectedCity);
+        }
         for(int numHighways = 0; numHighways < maxHighways(cities) + 1; numHighways++){
             if(numHighways <= n){
                 numHospitals = n - numHighways;
@@ -34,9 +45,44 @@ public class HighwaysAndHospitals {
         return minCost;
     }
 
-    public int maxHospitals(int n)
-    {
-        return n;
+    public static int getNumOfConnectedCities(int cityNumber, int cities[][]){
+        int answer = 0;
+        for(int i = 0; i < cities.length; i++){
+            if((cities[i][0] == cityNumber) || (cities[i][1] == cityNumber)){
+                answer++;
+            }
+        }
+        return answer;
+    }
+
+    public static void addConnectedCity(Queue<Integer> connectedCities, int cities[][], int rootCityNumber){
+        for(int i = 0; i < cities.length; i++){
+            if(cities[i][0] == rootCityNumber){
+                connectedCities.add(cities[i][1]);
+            }
+            if(cities[i][1] == rootCityNumber){
+                connectedCities.add(cities[i][0]);
+            }
+        }
+    }
+
+    public static int getMostConnectedCity(int maxValue, int cities[][]){
+        int answer = 0;
+        int mostConnected = 0;
+        int mostConnectedCity = 0;
+        for(int i = 0; i < cities.length; i++){
+            answer = getNumOfConnectedCities(cities[i][0], cities);
+            if((mostConnected < answer) && (answer < maxValue)){
+                mostConnected = answer;
+                mostConnectedCity = cities[i][0];
+            }
+            answer = getNumOfConnectedCities(cities[i][1], cities);
+            if((mostConnected < answer) && (answer < maxValue)){
+                mostConnected = answer;
+                mostConnectedCity = cities[i][1];
+            }
+        }
+        return mostConnectedCity;
     }
 
     public static int maxHighways(int cities[][])
@@ -55,25 +101,4 @@ public class HighwaysAndHospitals {
         answer = (hospitalCost * numHospitals) + (highwayCost * numHighways);
         return answer;
     }
-
-    public static int minNumHospitalsNeeded(int n, int cities[][]){
-        int connected[] = new int[n+1];
-        for(int i = 0; i < n+1; i++){
-            connected[i] = 0;
-        }
-        for(int j = 0; j < cities.length; j++){
-           connected[cities[j][0]]++;
-           connected[cities[j][1]]++;
-        }
-        int mostConnected = -1;
-        int mostConnectedCity = 0;
-        for(int i = 0; i < i+1; i++){
-            if(mostConnected < connected[i]){
-                mostConnected = connected[i];
-                mostConnectedCity = i;
-            }
-        }
-
-    }
-
 }
