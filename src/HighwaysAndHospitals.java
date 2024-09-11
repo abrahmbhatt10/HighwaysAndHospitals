@@ -27,9 +27,12 @@ public class HighwaysAndHospitals {
         int mostConnectedCity;
         for(int i = 0; i < cities.length; i++){
             mostConnectedCity = getMostConnectedCity(maxValue, cities);
+            if()
             hCities.add(mostConnectedCity);
             addConnectedCity(connectedCities, cities, mostConnectedCity);
+            maxValue = getNumOfConnectedCities(mostConnectedCity,cities);
         }
+        for(int i = 0; i < )
         for(int numHighways = 0; numHighways < maxHighways(cities) + 1; numHighways++){
             if(numHighways <= n){
                 numHospitals = n - numHighways;
@@ -43,6 +46,10 @@ public class HighwaysAndHospitals {
             }
         }
         return minCost;
+    }
+
+    public static boolean isExists(){
+
     }
 
     public static int getNumOfConnectedCities(int cityNumber, int cities[][]){
