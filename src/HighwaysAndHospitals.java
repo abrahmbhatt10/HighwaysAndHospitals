@@ -20,7 +20,6 @@ public class HighwaysAndHospitals {
      */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][]) {
         long minCost = 0;
-        long mCost;
         Map<Integer, Integer> hCities = new HashMap<Integer, Integer>();
         Map<Integer, Integer> connectedCities = new HashMap<Integer, Integer>();
         int maxValue = n+1;
