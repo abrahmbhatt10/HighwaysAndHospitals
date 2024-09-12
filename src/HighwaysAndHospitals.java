@@ -53,52 +53,51 @@ public class HighwaysAndHospitals {
         int maxValue = n+1;
         int mostConnectedCity;
         int connectedCityNum;
-        int [] numConnectedCities = new int[n+1];
+        Map<Integer, Integer> numConnectedCities = new HashMap<Integer, Integer>();
         /*
             If the cost to build a highway is less than simply building two hospitals in two unconnected cities
         then it makes sense to just build hospitals in all of the cities and no highways.
          */
-        if((2 * hospitalCost) < highwayCost){
-            System.out.println("2 times hospital less Min cost is "+ (hospitalCost*n));
-            return (hospitalCost * n);
-        }
         if(n == 1)
         {
-            System.out.println("n is 1Min cost is "+ (hospitalCost*n));
+            System.out.println("n is 1, Min cost is "+ (hospitalCost*n));
             return hospitalCost;
+        }
+        if(cities == null || cities.length == 0)
+        {
+            return (n* hospitalCost);
         }
         if(n == 2)
         {
-            if(cities.length == 0)
+            //System.out.println("n is 2 times hospital less Min cost is "+ (hospitalCost+highwayCost));
+            if((2*hospitalCost) < (hospitalCost+highwayCost))
             {
                 return (2*hospitalCost);
+
             }
-            //System.out.println("n is 2 times hospital less Min cost is "+ (hospitalCost+highwayCost));
             return hospitalCost+highwayCost;
         }
         /*
             Calculates the number of connections per city
          */
-        for(int i = 1; i < n+1; i++)
+        int key = 0;
+        for(int i = 0; i < cities.length ; i++)
         {
-            numConnectedCities[i] = getNumOfConnectedCities(i,cities);
-        }
-        /*
-            Input the number of connections per city in a hashmap.
-         */
-        for(int i = 0; i < n+1; i++){
-            clustersByCity.put(i, numConnectedCities[i]);
+            key = cities[i][0];
+            numConnectedCities.put(key, numConnectedCities.containsKey(key) ? numConnectedCities.get(key) + 1 : 1);
+            key = cities[i][1];
+            numConnectedCities.put(key, numConnectedCities.containsKey(key) ? numConnectedCities.get(key) + 1 : 1);
         }
         // Sorts the list
-        Map<Integer, Integer> sortedClustersByCity = sortByValue((HashMap<Integer, Integer>) clustersByCity);
+        Map<Integer, Integer> sortedClustersByCity = sortByValue((HashMap<Integer, Integer>) numConnectedCities);
         //System.out.println("Unsorted " + clustersByCity.toString());
         //System.out.println("Sorted " + sortedClustersByCity.toString());
         Map.Entry<Integer, Integer>[] sortedList = new Map.Entry [sortedClustersByCity.size()];
         sortedClustersByCity.entrySet().toArray(sortedList);
         minCost = Long.MAX_VALUE;
-        for(int i = 0; i < n+1; i++){
-            mostConnectedCity = sortedList[n-i].getKey();
-            connectedCityNum = sortedList[n-i].getValue();
+        for(int i = 0; i < sortedList.length; i++){
+            mostConnectedCity = sortedList[sortedList.length-1-i].getKey();
+            connectedCityNum = sortedList[sortedList.length-1-i].getValue();
             if(mostConnectedCity == 0 || connectedCityNum == 0)
             {
                 break;
@@ -109,37 +108,32 @@ public class HighwaysAndHospitals {
             else{
                 if(!(hCities.containsKey(mostConnectedCity)))
                 {
-                    hCities.put(mostConnectedCity, connectedCityNum);
-                    if(!(bHighways.containsKey(mostConnectedCity))){
-                        addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
+                    //Cheaper to build hospital at root node and all highways connected to it
+                    if(getSubCost(1, hospitalCost, connectedCityNum, highwayCost) == 0) {
+                        hCities.put(mostConnectedCity, connectedCityNum);
+                        if (!(bHighways.containsKey(mostConnectedCity))) {
+                            addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
+                        }
+                    }
+                    else
+                    {
+                        //Cheaper to build hospitals, so just entering single hospital node
+                        hCities.put(mostConnectedCity, 0);
                     }
                 }
             }
-            boolean errflag = false;
-            long n1, n2, n3, n4, n5, n6, n7 = 0;
-            try {
-                n1 = Math.multiplyExact((int)hospitalCost,(int)hCities.size());
-                n2 = Math.multiplyExact((int)highwayCost ,(int)bHighways.size());
-                n3 = Math.addExact((int)hCities.size(),(int)bHighways.size());
-                n4 = Math.subtractExact(n, n3);
-                n5 = Math.multiplyExact(n4,hospitalCost);
-                n6 = Math.addExact(n1,n2);
-                n7 = Math.addExact(n6, n5);
-            }
-            catch (ArithmeticException e)
-            {
-                errflag = true;
-            }
-            if(!errflag)
-            {
-                myCost = n7;
-            }
+            myCost = getMyCost(n, hCities.size(), hospitalCost, bHighways.size(),highwayCost);
             if(myCost < 0)
                 break;
             if(myCost < minCost && myCost > 0)
             {
                 minCost = myCost;
             }
+        }
+        myCost = getMyCost(n, hCities.size(), hospitalCost, bHighways.size(),highwayCost);
+        if(myCost < minCost && myCost > 0)
+        {
+            minCost = myCost;
         }
         //String citiesStr = "";
         //for(int i =0; i < cities.length; i++)
@@ -149,20 +143,60 @@ public class HighwaysAndHospitals {
         //System.out.println("Total Cities "+n+ " Possible Highways "+citiesStr);
         System.out.println("Total Cities "+n);
         System.out.println("Hospital Cost " + hospitalCost+ " Highways Cost "+ highwayCost);
-        //System.out.println("Hospitals in "+hCities.toString());
-        //System.out.println("Highways built "+bHighways.toString());
+        System.out.println("Hospitals in "+hCities.toString());
+        System.out.println("Highways built "+bHighways.toString());
         System.out.println("Min cost is "+ minCost);
         return minCost;
     }
 
-    public static int getNumOfConnectedCities(int cityNumber, int cities[][]){
-        int answer = 0;
-        for(int i = 0; i < cities.length; i++){
-            if((cities[i][0] == cityNumber) || (cities[i][1] == cityNumber)){
-                answer++;
-            }
+    public static long getMyCost(int n, int numCities, int hospitalCost, int numHighways, int highwayCost)
+    {
+        long mycost = 0;
+        boolean errflag = false;
+        long n1, n2, n3, n4, n5, n6, n7 = 0;
+        try {
+            n1 = Math.multiplyExact((int)hospitalCost, numCities);
+            n2 = Math.multiplyExact((int)highwayCost ,numHighways);
+            n3 = Math.addExact(numHighways,numCities);
+            n4 = Math.subtractExact(n, n3);
+            n5 = Math.multiplyExact(n4,hospitalCost);
+            n6 = Math.addExact(n1,n2);
+            n7 = Math.addExact(n6, n5);
         }
-        return answer;
+        catch (ArithmeticException e)
+        {
+            errflag = true;
+            mycost = 0;
+        }
+        if(!errflag)
+        {
+            mycost = n7;
+        }
+        return mycost;
+    }
+    /* return 0 if hospital on root and all highways connected
+       return 1 if all hospitals for that root node and no connections are added
+     */
+    public static long getSubCost(int numCities, int hospitalCost, int numHighways, int highwayCost)
+    {
+        long mycostHospital = 0, mycostHighways=0 ;
+        boolean errflag = false;
+        long n1, n2, n3, n4, n5, n6, n7 = 0;
+        try {
+            n1 = Math.multiplyExact((int)hospitalCost, numCities);
+            n2 = Math.multiplyExact((int)highwayCost ,numHighways);
+            mycostHighways = Math.addExact(n1,n2);
+            mycostHospital = Math.multiplyExact(hospitalCost, (numCities+numHighways));
+        }
+        catch (ArithmeticException e)
+        {
+            errflag = true;
+        }
+        if(!errflag && mycostHighways < mycostHospital)
+        {
+            return 0;
+        }
+        return 1;
     }
 
     public static void addConnectedCities(Map<Integer, Integer> hCities, Map<Integer, Integer> bHighways, int cities[][], int rootCityNumber){
@@ -182,20 +216,4 @@ public class HighwaysAndHospitals {
         }
     }
 
-    /*
-    public static int getMostConnectedCity(int maxValue, int numConnectedCities[]){
-        int answer = 0;
-        int mostConnected = 0;
-        int mostConnectedCity = 0;
-        for(int i = 1; i < numConnectedCities.length; i++)
-        {
-            answer = numConnectedCities[i];
-            if((answer != -1) && (mostConnected < answer) && (answer < maxValue)){
-                mostConnected = answer;
-                mostConnectedCity = i;
-            }
-        }
-        numConnectedCities[mostConnectedCity] = -1;
-        return mostConnectedCity;
-    }*/
 }
