@@ -109,17 +109,33 @@ public class HighwaysAndHospitals {
             {
                 break;
             }
+            /*
+                Check if the most connected city is already in the built-highways list.
+             */
             if(bHighways.containsKey(mostConnectedCity)){
+                /*
+                    For example, this is a city connected to two clusters.
+                    It has access from a hospital from a previous cluster.
+                    A decision needs to be made based on cost whether the second cluster connected nodes should be connected
+                    Through highway.
+                 */
                 if(getSubCost(1, hospitalCost, connectedCityNum, highwayCost) == 0) {
                     //only add highways if cheaper than hospital in each city
                     addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
                 }
             }
             else{
+                /*
+                    This is a new city that is not connected by highways.
+                    Check whether it has a hospital of its own.
+                 */
                 if(!(hCities.containsKey(mostConnectedCity)))
                 {
                     //Cheaper to build hospital at root node and all highways connected to it
                     if(getSubCost(1, hospitalCost, connectedCityNum, highwayCost) == 0) {
+                        /*
+                            Adding this city to build a hospital with all connected highways.
+                         */
                         hCities.put(mostConnectedCity, connectedCityNum);
                         if (!(bHighways.containsKey(mostConnectedCity))) {
                             addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
@@ -127,7 +143,7 @@ public class HighwaysAndHospitals {
                     }
                     else
                     {
-                        //Cheaper to build hospitals, so just entering single hospital node
+                        //Cheaper to build hospitals, but just entering single hospital node because it's expensive to build highways.
                         hCities.put(mostConnectedCity, 0);
                     }
                 }
@@ -164,6 +180,10 @@ public class HighwaysAndHospitals {
         long mycost = 0;
         boolean errflag = false;
         long n1, n2, n3, n4, n5, n6, n7 = 0;
+        /*
+            I googled searched how to avoid long overflow in java
+            https://mkyong.com/java8/java-8-math-exact-examples/
+         */
         try {
             n1 = Math.multiplyExact((int)hospitalCost, numCities);
             n2 = Math.multiplyExact((int)highwayCost ,numHighways);
