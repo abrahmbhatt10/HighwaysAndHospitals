@@ -103,7 +103,10 @@ public class HighwaysAndHospitals {
                 break;
             }
             if(bHighways.containsKey(mostConnectedCity)){
-                addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
+                if(getSubCost(1, hospitalCost, connectedCityNum, highwayCost) == 0) {
+                    //only add highways if cheaper than hospital in each city
+                    addConnectedCities(hCities, bHighways, cities, mostConnectedCity);
+                }
             }
             else{
                 if(!(hCities.containsKey(mostConnectedCity)))
