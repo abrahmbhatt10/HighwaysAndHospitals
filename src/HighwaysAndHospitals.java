@@ -15,7 +15,7 @@ import java.util.Map;
 public class HighwaysAndHospitals {
 
     /*
-     * This function returns the minimum cost to provide
+     *  This function returns the minimum cost to provide
      *  hospital access for all citizens in the county.
      */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][]) {
@@ -26,6 +26,13 @@ public class HighwaysAndHospitals {
         int mostConnectedCity;
         int connectedCityNum;
         int [] numConnectedCities = new int[n+1];
+        /*
+            If the cost to build a highway is less than simply building two hospitals in two unconnected cities
+        then it makes sense to just build hospitals in all of the cities and no highways.
+         */
+        if((2 * hospitalCost) < highwayCost){
+            return hospitalCost * n;
+        }
         for(int i = 1; i < n+1; i++)
         {
             numConnectedCities[i] = getNumOfConnectedCities(i,cities);
@@ -59,7 +66,7 @@ public class HighwaysAndHospitals {
             }
         }
         System.out.println("Hospitals "+ hCities.toString());
-        System.out.println("Hightways "+ connectedCities.toString());
+        System.out.println("Highways "+ connectedCities.toString());
         System.out.println("NumCost "+hospitalCost+" "+highwayCost);
         String citiesStr = "";
         for(int i =0; i < cities.length; i++)
