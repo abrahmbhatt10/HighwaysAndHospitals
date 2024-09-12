@@ -35,7 +35,6 @@ public class HighwaysAndHospitals {
                 return (o1.getValue()).compareTo(o2.getValue());
             }
         });
-
         // put data from sorted list to hashmap
         HashMap<Integer, Integer> temp = new LinkedHashMap<Integer, Integer>();
         for (Map.Entry<Integer, Integer> aa : list) {
