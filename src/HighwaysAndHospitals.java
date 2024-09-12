@@ -81,7 +81,7 @@ public class HighwaysAndHospitals {
         System.out.println("Unsorted " + clustersByCity.toString());
         System.out.println("Sorted " + sortedClustersByCity.toString());
         for(int i = 0; i < cities.length; i++){
-            mostConnectedCity = getMostConnectedCity(maxValue, numConnectedCities);
+            mostConnectedCity = sortedClustersByCity.get(n-i);
             connectedCityNum = getNumOfConnectedCities(mostConnectedCity, cities);
             if(mostConnectedCity == 0 || connectedCityNum == 0)
             {
