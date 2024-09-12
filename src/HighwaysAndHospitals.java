@@ -49,14 +49,12 @@ public class HighwaysAndHospitals {
         long minCost, myCost = 0;
         Map<Integer, Integer> hCities = new HashMap<Integer, Integer>();
         Map<Integer, Integer> bHighways = new HashMap<Integer, Integer>();
-        Map<Integer, Integer> clustersByCity = new HashMap<Integer,Integer>();
-        int maxValue = n+1;
         int mostConnectedCity;
         int connectedCityNum;
         Map<Integer, Integer> numConnectedCities = new HashMap<Integer, Integer>();
         /*
             If the cost to build a highway is less than simply building two hospitals in two unconnected cities
-        then it makes sense to just build hospitals in all of the cities and no highways.
+        then it makes sense to just build hospitals in all the cities and no highways.
          */
         if(n == 1)
         {
@@ -65,14 +63,14 @@ public class HighwaysAndHospitals {
         }
         if(cities == null || cities.length == 0)
         {
-            return (n* hospitalCost);
+            return (n * hospitalCost);
         }
         if(n == 2)
         {
             //System.out.println("n is 2 times hospital less Min cost is "+ (hospitalCost+highwayCost));
             if((2*hospitalCost) < (hospitalCost+highwayCost))
             {
-                return (2*hospitalCost);
+                return (2 * hospitalCost);
 
             }
             return hospitalCost+highwayCost;
@@ -90,14 +88,23 @@ public class HighwaysAndHospitals {
         }
         // Sorts the list
         Map<Integer, Integer> sortedClustersByCity = sortByValue((HashMap<Integer, Integer>) numConnectedCities);
-        //System.out.println("Unsorted " + clustersByCity.toString());
-        //System.out.println("Sorted " + sortedClustersByCity.toString());
+        /*
+            I google searched how to iterate through a hashmap and realized I need
+            to change hashmap to an arraylist:
+            https://stackoverflow.com/questions/24943302/convert-an-entryset-to-an-array
+         */
         Map.Entry<Integer, Integer>[] sortedList = new Map.Entry [sortedClustersByCity.size()];
         sortedClustersByCity.entrySet().toArray(sortedList);
         minCost = Long.MAX_VALUE;
+        /*
+            I am iterating through the most connected cities.
+         */
         for(int i = 0; i < sortedList.length; i++){
             mostConnectedCity = sortedList[sortedList.length-1-i].getKey();
             connectedCityNum = sortedList[sortedList.length-1-i].getValue();
+            /*
+                If there is no connection, then break out.
+             */
             if(mostConnectedCity == 0 || connectedCityNum == 0)
             {
                 break;
