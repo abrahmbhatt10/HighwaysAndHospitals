@@ -19,21 +19,55 @@ public class HighwaysAndHospitals {
         /*
             Checks for the special case that hospitals are cheaper than highways.
          */
-        if(hospitalCost < highwayCost){
-            return hospitalCost * n;
+
+        if((2*hospitalCost) < highwayCost){
+            return (long)(hospitalCost * n);
         }
-        int numberOfClusters = getNumberOfClusters(n, cities);
-        return ((numberOfClusters * hospitalCost) + (n - numberOfClusters) * highwayCost);
+        long minConnected= 0;
+        long numberOfClusters=0;
+        long mCost;
+
+        numberOfClusters = getNumberOfClusters(n, cities);
+
+        if(highwayCost > hospitalCost)
+        {
+            minConnected = ((long) highwayCost)/((long)(highwayCost-hospitalCost));
+            minConnected *= (long)n;
+            if(minConnected >= (numberOfClusters))
+            {
+                numberOfClusters = (long)n;
+            }
+        }
+
+        System.out.println("Number of Clusters "+numberOfClusters+" hospitalCost "+hospitalCost+" and cities "+n+" highwayCost "+highwayCost);
+        mCost = ((long)(n - numberOfClusters) * (long)highwayCost)+ (((long)numberOfClusters * (long) hospitalCost));
+        return mCost;
     }
 
-    public static int getNumberOfClusters(int n, int cities[][]){
+    public static int getRoot(int mapHighways[], int branch){
+        if(mapHighways[branch] == 0){
+            return branch;
+        }
+        //System.out.println("getRoot of "+branch);
+        int parent = mapHighways[branch];
+        int grandParent = 0;
+        while(mapHighways[parent] != 0){
+            grandParent = mapHighways[parent];
+            //System.out.println("grand parent "+grandParent);
+            parent = grandParent;
+            //System.out.println("parent "+parent);
+        }
+        //System.out.println("Return parent "+parent+" for branch "+branch);
+        return parent;
+    }
+    public static long getNumberOfClusters(int n, int cities[][]){
         int[] mapHighways= new int[n + 1];
         int root = 0;
         int branch = 0;
-        int subroot = 0;
-        int subRoot1 = 0;
+        int rootOfBranch = 0;
+        int rootOfRoot= 0;
         int numClusters = 0;
-        for(int i = 0; i < n + 1; i++){
+        for(int i = 1; i < n + 1; i++){
             mapHighways[i] = 0;
         }
         for(int i = 0; i < cities.length; i++){
@@ -45,26 +79,23 @@ public class HighwaysAndHospitals {
                 root = cities[i][1];
                 branch = cities[i][0];
             }
-            if(mapHighways[branch] == 0){
-                mapHighways[branch] = root;
+            if(root == branch)
+            {
+                System.out.print("Error Root "+root+" is equal to "+branch);
+                return 0;
             }
-            else{
-                subroot = mapHighways[branch];
-                while((root < subroot) && (subroot != 0)){
-                    subRoot1 = mapHighways[subroot];
-                    subroot = subRoot1;
-                }
-                if((root < subroot) && (mapHighways[subroot] == 0)){
-                    mapHighways[subroot] = root;
-                }
-                else{
-                    /*
-                        SubRoot is less than root.
-                     */
-                    mapHighways[root] = subroot;
-                }
+            rootOfBranch = getRoot(mapHighways,branch);
+            rootOfRoot = getRoot(mapHighways,root);
+            if(rootOfRoot < rootOfBranch)
+            {
+                mapHighways[rootOfBranch] = rootOfRoot;
+            }
+            else if(rootOfBranch < rootOfRoot)
+            {
+                mapHighways[rootOfRoot] = rootOfBranch;
             }
         }
+        numClusters = 0;
         for(int i = 1; i < mapHighways.length; i++){
             if(mapHighways[i] == 0){
                 numClusters++;

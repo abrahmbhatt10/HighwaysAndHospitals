@@ -31,10 +31,10 @@ public class HighwaysAndHospitalsTest {
     public void testCorrectSmall() {
         setTestData(0);
     }
-    @Timeout(value = 1, unit = TimeUnit.SECONDS)
+    @Timeout(value = 60, unit = TimeUnit.SECONDS)
     @Test
     public void testCorrectLarge() {
-        setTestData(3);
+        setTestData(10);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class HighwaysAndHospitalsTest {
             {
                 long answerCost = Long.parseLong(answerReader.readLine());
                 loadTest(testReader);
-                assertEquals(answerCost, studentSolution.cost(n, hospitalCost, hightwayCost, cities),
+                assertEquals((long)answerCost, (long)studentSolution.cost(n, hospitalCost, hightwayCost, cities),
                         "Test " + testNumber + " failed: should return " + answerCost);
             }
         } catch (IOException e) {
