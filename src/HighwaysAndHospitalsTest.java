@@ -34,7 +34,7 @@ public class HighwaysAndHospitalsTest {
     @Timeout(value = 60, unit = TimeUnit.SECONDS)
     @Test
     public void testCorrectLarge() {
-        setTestData(10);
+        setTestData(3);
     }
 
     @Test

@@ -20,9 +20,6 @@ public class HighwaysAndHospitals {
             Checks for the special case that hospitals are cheaper than highways.
          */
 
-        if((2*hospitalCost) < highwayCost){
-            return (long)(hospitalCost * n);
-        }
         long minConnected= 0;
         long numberOfClusters=0;
         long mCost;
@@ -31,15 +28,15 @@ public class HighwaysAndHospitals {
 
         if(highwayCost > hospitalCost)
         {
-            minConnected = ((long) highwayCost)/((long)(highwayCost-hospitalCost));
-            minConnected *= (long)n;
-            if(minConnected >= (numberOfClusters))
-            {
+            //minConnected = ((long) highwayCost)/((long)(highwayCost-hospitalCost));
+            //minConnected *= (long)n;
+            //if(minConnected >= (numberOfClusters))
+            //{
                 numberOfClusters = (long)n;
-            }
+            //}
         }
 
-        System.out.println("Number of Clusters "+numberOfClusters+" hospitalCost "+hospitalCost+" and cities "+n+" highwayCost "+highwayCost);
+        //System.out.println("Number of Clusters "+numberOfClusters+" hospitalCost "+hospitalCost+" and cities "+n+" highwayCost "+highwayCost);
         mCost = ((long)(n - numberOfClusters) * (long)highwayCost)+ (((long)numberOfClusters * (long) hospitalCost));
         return mCost;
     }
