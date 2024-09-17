@@ -28,15 +28,15 @@ public class HighwaysAndHospitals {
 
         if(highwayCost > hospitalCost)
         {
-            //minConnected = ((long) highwayCost)/((long)(highwayCost-hospitalCost));
-            //minConnected *= (long)n;
-            //if(minConnected >= (numberOfClusters))
+            // This figures out the minConnected = ((long) highwayCost)/((long)(highwayCost-hospitalCost));
+            // Multiples by minConnected *= (long)n;
+            // Checks if(minConnected >= (numberOfClusters)), t
             //{
                 numberOfClusters = (long)n;
             //}
         }
 
-        //System.out.println("Number of Clusters "+numberOfClusters+" hospitalCost "+hospitalCost+" and cities "+n+" highwayCost "+highwayCost);
+        // Returns the "Number of Clusters "+numberOfClusters+" hospitalCost "+hospitalCost+" and cities "+n+" highwayCost "+highwayCost
         mCost = ((long)(n - numberOfClusters) * (long)highwayCost)+ (((long)numberOfClusters * (long) hospitalCost));
         return mCost;
     }
@@ -45,18 +45,27 @@ public class HighwaysAndHospitals {
         if(mapHighways[branch] == 0){
             return branch;
         }
-        //System.out.println("getRoot of "+branch);
+        // Returns the getRoot of "+branch);
         int parent = mapHighways[branch];
         int grandParent = 0;
+        /*
+            This code traverses each subRoot to figure out which is the final node, and thus can
+            provide insight as to the number of clusters within a given set.
+         */
         while(mapHighways[parent] != 0){
             grandParent = mapHighways[parent];
-            //System.out.println("grand parent "+grandParent);
             parent = grandParent;
-            //System.out.println("parent "+parent);
         }
-        //System.out.println("Return parent "+parent+" for branch "+branch);
+        // Returns the parent "+parent+" for branch "+branch
         return parent;
     }
+
+    /*
+        This gets the number of clusters using the Union find algorithm,
+        A convenient way to take each edge, map it to a subRoot, and eventually
+        map all the subRoots to n number of final roots, which will represent
+        our two separate clusters.
+     */
     public static long getNumberOfClusters(int n, int cities[][]){
         int[] mapHighways= new int[n + 1];
         int root = 0;
@@ -64,10 +73,19 @@ public class HighwaysAndHospitals {
         int rootOfBranch = 0;
         int rootOfRoot= 0;
         int numClusters = 0;
+        /*
+            Fills mapHighways[] with 0's.
+         */
         for(int i = 1; i < n + 1; i++){
             mapHighways[i] = 0;
         }
+        /*
+            Assigns subRoots for each branch.
+         */
         for(int i = 0; i < cities.length; i++){
+            /*
+                Checks if a city is a root or branch, and if its equal, return 0.
+             */
             if(cities[i][0] < cities[i][1]){
                 root = cities[i][0];
                 branch = cities[i][1];
@@ -81,6 +99,11 @@ public class HighwaysAndHospitals {
                 System.out.print("Error Root "+root+" is equal to "+branch);
                 return 0;
             }
+            /*
+                Plots each subRoot in the mapHighways array, and keeps going down
+                Row by row to plot each subRoot. At the end, there will be
+                n blank spaces remaining, hinting at n clusters.
+             */
             rootOfBranch = getRoot(mapHighways,branch);
             rootOfRoot = getRoot(mapHighways,root);
             if(rootOfRoot < rootOfBranch)
@@ -93,6 +116,9 @@ public class HighwaysAndHospitals {
             }
         }
         numClusters = 0;
+        /*
+            Gets and returns the number of clusters using the 0's in the bottom row.
+         */
         for(int i = 1; i < mapHighways.length; i++){
             if(mapHighways[i] == 0){
                 numClusters++;
