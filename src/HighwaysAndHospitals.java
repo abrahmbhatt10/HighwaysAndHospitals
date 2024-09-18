@@ -94,11 +94,6 @@ public class HighwaysAndHospitals {
                 root = cities[i][1];
                 branch = cities[i][0];
             }
-            if(root == branch)
-            {
-                System.out.print("Error Root "+root+" is equal to "+branch);
-                return 0;
-            }
             /*
                 Plots each subRoot in the mapHighways array, and keeps going down
                 Row by row to plot each subRoot. At the end, there will be
