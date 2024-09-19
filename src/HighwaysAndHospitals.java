@@ -110,6 +110,10 @@ public class HighwaysAndHospitals {
                 mapHighways[rootOfRoot] = rootOfBranch;
             }
         }
+        /*
+            Uses path compression to make the code more efficient.
+         */
+        pathCompression(mapHighways, cities);
         numClusters = 0;
         /*
             Gets and returns the number of clusters using the 0's in the bottom row.
@@ -121,4 +125,41 @@ public class HighwaysAndHospitals {
         }
         return numClusters;
     }
+
+    /*
+    (The below pseudocode was taken from Mr. Blick's slides):
+    For each edge AB:
+	X = A
+	While city X is not its root:
+		X = roots[X]
+	While city A is not its root:
+		temp = roots[A]
+		roots[A] = X
+		A = temp
+
+		The path compression algorithm makes each branch and subBranch a direct branch to the main root.
+     */
+    public static void pathCompression(int[] mapHighways, int[][] cities){
+        int edgeX;
+        int temp;
+        for (int i = 0; i < cities.length; i++){
+            for(int j = 0; j < cities[i].length; j++){
+                edgeX = cities[i][j];
+                while(edgeX != getRoot(mapHighways,edgeX)){
+                    edgeX = getRoot(mapHighways,edgeX);
+                    while(cities[i][j] != getRoot(mapHighways,cities[i][j])){
+                        temp = getRoot(mapHighways,cities[i][j]);
+                        setRoot(mapHighways, cities[i][j], edgeX);
+                        cities[i][j] = temp;
+                    }
+                }
+            }
+        }
+    }
+
+    // The below function simply sets the branch at mapHighways to the root passed.
+    public static void setRoot(int[] mapHighways, int branch, int root){
+        mapHighways[branch] = root;
+    }
+
 }
