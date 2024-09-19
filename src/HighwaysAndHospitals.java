@@ -42,7 +42,7 @@ public class HighwaysAndHospitals {
     }
 
     public static int getRoot(int mapHighways[], int branch){
-        if(mapHighways[branch] == 0){
+        if(mapHighways[branch] <= 0){
             return branch;
         }
         // Returns the getRoot of "+branch);
@@ -52,7 +52,7 @@ public class HighwaysAndHospitals {
             This code traverses each subRoot to figure out which is the final node, and thus can
             provide insight as to the number of clusters within a given set.
          */
-        while(mapHighways[parent] != 0){
+        while(mapHighways[parent] > 0){
             grandParent = mapHighways[parent];
             parent = grandParent;
         }
@@ -104,22 +104,25 @@ public class HighwaysAndHospitals {
             if(rootOfRoot < rootOfBranch)
             {
                 mapHighways[rootOfBranch] = rootOfRoot;
+                mapHighways[rootOfRoot]--;
             }
             else if(rootOfBranch < rootOfRoot)
             {
                 mapHighways[rootOfRoot] = rootOfBranch;
+                mapHighways[rootOfBranch]--;
             }
         }
         /*
             Uses path compression to make the code more efficient.
          */
+        weightBalancing(mapHighways, cities);
         pathCompression(mapHighways, cities);
         numClusters = 0;
         /*
             Gets and returns the number of clusters using the 0's in the bottom row.
          */
         for(int i = 1; i < mapHighways.length; i++){
-            if(mapHighways[i] == 0){
+            if(mapHighways[i] <= 0){
                 numClusters++;
             }
         }
@@ -174,20 +177,20 @@ public class HighwaysAndHospitals {
      */
 
     public static void weightBalancing(int[] mapHighways, int[][] cities){
-        int edgeX;
-        int edgeY;
+        int weightX;
+        int weightY;
         int R;
         int S;
         for (int i = 0; i < cities.length; i++) {
             // Find roots, R and S
-            X = order(R)
-            Y = order(S)
-            if (X > Y)
-                root[S] = R
+            R = getRoot(mapHighways, cities[i][0]);
+            S = getRoot(mapHighways, cities[i][1]);
+            weightX = mapHighways[R];
+            weightY = mapHighways[S];
+            if (Math.abs(weightX) > Math.abs(weightY))
+                setRoot(mapHighways, S, R);
             else
-                root[R] = S
+                setRoot(mapHighways, R, S);
         }
     }
-
-    public static
 }
