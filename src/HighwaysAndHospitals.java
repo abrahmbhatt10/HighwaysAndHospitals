@@ -169,6 +169,7 @@ public class HighwaysAndHospitals {
     }
 
     /*
+    (The below pseudocode was taken from Mr. Blick's slides):
     For each edge AB:
 	// Find roots, R and S
 	X = order(R)
@@ -177,6 +178,9 @@ public class HighwaysAndHospitals {
 		root[S] = R
 	else
 		root[R] = S
+
+	    The weight balancing algorithm makes sure that we are reducing the amount of depth for each cluster
+	    (i.e. the clusters with a higher order are made the roots of the subClusters with a lower order)
      */
 
     public static void weightBalancing(int[] mapHighways, int[][] cities){
