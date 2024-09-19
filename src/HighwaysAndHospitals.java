@@ -162,4 +162,32 @@ public class HighwaysAndHospitals {
         mapHighways[branch] = root;
     }
 
+    /*
+    For each edge AB:
+	// Find roots, R and S
+	X = order(R)
+	Y = order(S)
+	if (X > Y)
+		root[S] = R
+	else
+		root[R] = S
+     */
+
+    public static void weightBalancing(int[] mapHighways, int[][] cities){
+        int edgeX;
+        int edgeY;
+        int R;
+        int S;
+        for (int i = 0; i < cities.length; i++) {
+            // Find roots, R and S
+            X = order(R)
+            Y = order(S)
+            if (X > Y)
+                root[S] = R
+            else
+                root[R] = S
+        }
+    }
+
+    public static
 }
