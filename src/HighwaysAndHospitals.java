@@ -104,12 +104,12 @@ public class HighwaysAndHospitals {
             if(rootOfRoot < rootOfBranch)
             {
                 mapHighways[rootOfBranch] = rootOfRoot;
-                mapHighways[rootOfRoot]--;
+                mapHighways[rootOfRoot] = mapHighways[rootOfRoot] - 1;
             }
             else if(rootOfBranch < rootOfRoot)
             {
                 mapHighways[rootOfRoot] = rootOfBranch;
-                mapHighways[rootOfBranch]--;
+                mapHighways[rootOfBranch] = mapHighways[rootOfBranch] - 1;
             }
         }
         /*
@@ -162,6 +162,9 @@ public class HighwaysAndHospitals {
 
     // The below function simply sets the branch at mapHighways to the root passed.
     public static void setRoot(int[] mapHighways, int branch, int root){
+        if(branch == root){
+            return;
+        }
         mapHighways[branch] = root;
     }
 
