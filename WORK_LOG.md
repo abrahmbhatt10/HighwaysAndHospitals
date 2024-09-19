@@ -30,6 +30,9 @@ Name: Agastya Brahmbhatt
 | September 13 |  10:30-11pm   |                                                                                                                     I think at some point in this timeframe I thought of what Josh said in class today, about casting everything to a long. |
 | September 13 |  11-11:30pm   | I realized that the overflow message was because I hadn't cast it to a long, which was why the integer storage size couldn't handle the amount of memory needed to store a long variable, which was why it was giving the overflow message. |
 | September 13 | 11:30pm-12am  |                                                                                                                                                    I spent time trying to make it more convenient/faster, and writing my work log/comments. |
+| September 18 | 5:30 - 6:00pm |                                                                                                                                                          I implemented the path compression algorithm by converting the pseudocode to java. |
+| September 18 |   6-6:30 pm   |                                                                                                                                                          I implemented the weight balancing algorithm by converting the pseudocode to java. |
+| September 18 |   6:30-7pm    |                                                  I debugged the code and eventually got it to work by preventing an infinite loop because it kept assigning itself to its own root, and I fixed that by checking if it was equal to itself. |
 
 
 To add a new row to the table, click into a cell and then hit shift-enter.
